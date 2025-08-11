@@ -1,0 +1,43 @@
+{
+  "name": "African Tales",
+  "short_name": "Engaging African Kids Tales!",
+  "theme_color": "#ffffff",
+  "background_color": "#EF4444",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "icons/logo.svg",
+      "sizes": "70x70",
+      "type": "image/svg",
+      "purpose": "any maskable"
+    },    
+    {
+      "src": "icons/logo.svg",
+      "sizes": "144x144",
+      "type": "image/svg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/logo.svg",
+      "sizes": "150x150",
+      "type": "image/svg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg",
+      "purpose": "any maskable"
+    },    
+    {
+      "src": "icons/logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg",
+      "purpose": "any maskable"
+    }
+  ],
+  "splash_pages": null
+}
