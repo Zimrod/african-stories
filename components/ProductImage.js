@@ -3,12 +3,23 @@ import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
-function ProductImage({ images }) {
-  const [mainImg, setMainImg] = useState(images[0])
-  const ref = useRef()
+function ProductImage({ images = [] }) {
+  const firstImage = images.length > 0 ? images[0] : null;
+  const [mainImg, setMainImg] = useState(firstImage);
+  const ref = useRef();
 
   function scroll(scrollOffset) {
-    ref.current.scrollLeft += scrollOffset
+    if (ref.current) {
+      ref.current.scrollLeft += scrollOffset;
+    }
+  }
+
+  if (!firstImage) {
+    return (
+      <div className="w-full md:w-1/2 max-w-md border border-palette-lighter bg-white rounded shadow-lg flex items-center justify-center h-96">
+        <p className="text-gray-500">No image available</p>
+      </div>
+    );
   }
 
   return (
@@ -16,7 +27,7 @@ function ProductImage({ images }) {
       <div className="relative h-96">
         <Image
           src={mainImg.originalSrc}
-          alt={mainImg.altText}
+          alt={mainImg.altText || 'Product image'}
           layout="fill"
           className="transform duration-500 ease-in-out hover:scale-105"
         />
@@ -24,7 +35,7 @@ function ProductImage({ images }) {
       <div className="relative flex border-t border-palette-lighter">
         <button
           aria-label="left-scroll"
-          className="h-32 bg-palette-lighter hover:bg-palette-light  absolute left-0 z-10 opacity-75"
+          className="h-32 bg-palette-lighter hover:bg-palette-light absolute left-0 z-10 opacity-75"
           onClick={() => scroll(-300)}
         >
           <FontAwesomeIcon icon={faArrowLeft} className="w-3 mx-1 text-palette-primary" />
@@ -42,7 +53,7 @@ function ProductImage({ images }) {
             >
               <Image
                 src={imgItem.originalSrc}
-                alt={imgItem.altText}
+                alt={imgItem.altText || 'Product thumbnail'}
                 layout="fill"
               />
             </button>
@@ -50,14 +61,14 @@ function ProductImage({ images }) {
         </div>
         <button
           aria-label="right-scroll"
-          className="h-32 bg-palette-lighter hover:bg-palette-light  absolute right-0 z-10 opacity-75"
+          className="h-32 bg-palette-lighter hover:bg-palette-light absolute right-0 z-10 opacity-75"
           onClick={() => scroll(300)}
         >
           <FontAwesomeIcon icon={faArrowRight} className="w-3 mx-1 text-palette-primary" />
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 export default ProductImage
