@@ -5,49 +5,41 @@ import { useCartContext, useAddToCartContext } from '@/context/Store'
 
 function ProductForm({ title, handle, variants, setVariantPrice, mainImg }) {
   const [quantity, setQuantity] = useState(1)
-  const [variantId, setVariantId] = useState(variants[0].node.id)
+  const [variantId, setVariantId] = useState(0) // index-based since no id
   const [variant, setVariant] = useState(variants[0])
   const isLoading = useCartContext()[2]
   const addToCart = useAddToCartContext()
 
-  const atcBtnStyle = isLoading ?
-    `pt-3 pb-2 bg-palette-primary text-white w-full mt-2 rounded-sm font-primary font-semibold text-xl flex 
-                      justify-center items-baseline  hover:bg-palette-dark opacity-25 cursor-none`
-    :
-    `pt-3 pb-2 bg-palette-primary text-white w-full mt-2 rounded-sm font-primary font-semibold text-xl flex 
-                      justify-center items-baseline  hover:bg-palette-dark`
+  const atcBtnStyle = isLoading
+    ? `pt-3 pb-2 bg-palette-primary text-white w-full mt-2 rounded-sm font-primary font-semibold text-xl flex justify-center items-baseline  hover:bg-palette-dark opacity-25 cursor-none`
+    : `pt-3 pb-2 bg-palette-primary text-white w-full mt-2 rounded-sm font-primary font-semibold text-xl flex justify-center items-baseline  hover:bg-palette-dark`
 
-  function handleSizeChange(e) {
-    setVariantId(e)
-    // send back size change
-    const selectedVariant = variants.filter(v => v.node.id === e).pop()
-    setVariantPrice(selectedVariant.node.price)
-
-    // update variant
+  function handleSizeChange(index) {
+    setVariantId(index)
+    const selectedVariant = variants[index]
+    setVariantPrice(selectedVariant.price)
     setVariant(selectedVariant)
   }
 
   async function handleAddToCart() {
-    const varId = variant.node.id
-    // update store context
     if (quantity !== '') {
       addToCart({
         productTitle: title,
         productHandle: handle,
         productImage: mainImg,
-        variantId: varId,
-        variantPrice: variant.node.price,
-        variantTitle: variant.node.title,
+        variantId: variantId, // using index here
+        variantPrice: variant.price,
+        variantTitle: variant.title || '',
         variantQuantity: quantity
       })
     }
   }
 
-  function updateQuantity(e) {
-    if (e === '') {
+  function updateQuantity(val) {
+    if (val === '') {
       setQuantity('')
     } else {
-      setQuantity(Math.floor(e))
+      setQuantity(Math.floor(val))
     }
   }
 
@@ -77,17 +69,14 @@ function ProductForm({ title, handle, variants, setVariantPrice, mainImg }) {
             value={variantId}
             className="form-select border border-gray-300 rounded-sm w-full text-gray-900 focus:border-palette-light focus:ring-palette-light"
           >
-            {
-              variants.map(item => (
-                <option
-                  id={item.node.id}
-                  key={item.node.id}
-                  value={item.node.id}
-                >
-                  {item.node.title}
-                </option>
-              ))
-            }
+            {variants.map((item, index) => (
+              <option
+                key={index}
+                value={index}
+              >
+                {item.title || `Option ${index + 1}`}
+              </option>
+            ))}
           </select>
         </div>
       </div>

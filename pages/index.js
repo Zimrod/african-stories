@@ -1,10 +1,8 @@
 import StoreHeading from '@/components/StoreHeading'
 import ProductListings from '@/components/ProductListings'
-// import { getAllProductsInCollection } from '@/lib/shopify'
-import { products } from '../data/products'
+import { getAllProducts } from '@/lib/supabase'
 
 function IndexPage({ products }) {
-
   return (
     <div className="mx-auto max-w-6xl">
       <StoreHeading />
@@ -13,13 +11,15 @@ function IndexPage({ products }) {
   )
 }
 
+// Only keep getStaticProps for the homepage
 export async function getStaticProps() {
-//   const products = await getAllProductsInCollection()
+  const products = await getAllProducts()
 
   return {
     props: {
       products
     },
+    revalidate: 60 // Optional: ISR every 60 seconds
   }
 }
 
